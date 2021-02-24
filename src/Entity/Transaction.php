@@ -59,6 +59,23 @@ class Transaction
      */
     private $part_user_retrait;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $type;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=AdminSystem::class, inversedBy="transactions")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $utilisateurAP;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=CompteAgencePartenaire::class, inversedBy="transactions")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $compteAP;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -156,6 +173,42 @@ class Transaction
     public function setPartUserRetrait(?float $part_user_retrait): self
     {
         $this->part_user_retrait = $part_user_retrait;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getUtilisateurAP(): ?AdminSystem
+    {
+        return $this->utilisateurAP;
+    }
+
+    public function setUtilisateurAP(?AdminSystem $utilisateurAP): self
+    {
+        $this->utilisateurAP = $utilisateurAP;
+
+        return $this;
+    }
+
+    public function getCompteAP(): ?CompteAgencePartenaire
+    {
+        return $this->compteAP;
+    }
+
+    public function setCompteAP(?CompteAgencePartenaire $compteAP): self
+    {
+        $this->compteAP = $compteAP;
 
         return $this;
     }

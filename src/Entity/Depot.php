@@ -34,6 +34,18 @@ class Depot
      */
     private $montant;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=AdminSystem::class, inversedBy="depots")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $caissier;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=CompteAgencePartenaire::class, inversedBy="depots")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $compteAP;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -71,6 +83,30 @@ class Depot
     public function setMontant(int $montant): self
     {
         $this->montant = $montant;
+
+        return $this;
+    }
+
+    public function getCaissier(): ?AdminSystem
+    {
+        return $this->caissier;
+    }
+
+    public function setCaissier(?AdminSystem $caissier): self
+    {
+        $this->caissier = $caissier;
+
+        return $this;
+    }
+
+    public function getCompteAP(): ?CompteAgencePartenaire
+    {
+        return $this->compteAP;
+    }
+
+    public function setCompteAP(?CompteAgencePartenaire $compteAP): self
+    {
+        $this->compteAP = $compteAP;
 
         return $this;
     }

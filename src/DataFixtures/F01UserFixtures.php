@@ -3,13 +3,14 @@
 namespace App\DataFixtures;
 
 use App\Entity\AdminSystem;
+use App\Entity\Client;
 use App\Entity\Profil;
 use Faker\Factory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class UserFixtures extends Fixture
+class F01UserFixtures extends Fixture
 {
     private $encoder;
     public function __construct(UserPasswordEncoderInterface $encoder)
@@ -42,6 +43,16 @@ class UserFixtures extends Fixture
 
         
         for ($i=0; $i <10 ; $i++) { 
+
+            $client = new Client();
+            $password =$this->encoder->encodePassword($client,"passer");
+            $client->setUsername($faker->userName)
+                   ->setPassword($password)
+                   ->setNomComplet($faker->name())
+                   ->setTelephone($faker->phoneNumber)
+                   ->setCNI($faker->text(20));
+            $manager->persist($client);
+
 
             $user = new AdminSystem();
             $password =$this->encoder->encodePassword($user,"passer");

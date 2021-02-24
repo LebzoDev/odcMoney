@@ -3,3 +3,5 @@
 #    controller: App\Controller\DefaultController::index
 api_login_check:
     path: /api/login_check
+api_login_check_client:
+    path: /api/login_check_client

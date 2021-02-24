@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\AgencePartenaireRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -38,6 +40,21 @@ class AgencePartenaire
      * @ORM\Column(type="float", nullable=true)
      */
     private $longitude;
+
+    /**
+     * @ORM\OneToOne(targetEntity=CompteAgencePartenaire::class, mappedBy="agencePartenaireAssociee", cascade={"persist", "remove"})
+     */
+    private $compteAgencePartenaire;
+
+    /**
+     * @ORM\OneToMany(targetEntity=AdminSystem::class, mappedBy="agencePartenaire")
+     */
+    private $utilisateurs;
+
+    public function __construct()
+    {
+        $this->utilisateurs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -88,6 +105,53 @@ class AgencePartenaire
     public function setLongitude(?float $longitude): self
     {
         $this->longitude = $longitude;
+
+        return $this;
+    }
+
+    public function getCompteAgencePartenaire(): ?CompteAgencePartenaire
+    {
+        return $this->compteAgencePartenaire;
+    }
+
+    public function setCompteAgencePartenaire(CompteAgencePartenaire $compteAgencePartenaire): self
+    {
+        // set the owning side of the relation if necessary
+        if ($compteAgencePartenaire->getAgencePartenaireAssociee() !== $this) {
+            $compteAgencePartenaire->setAgencePartenaireAssociee($this);
+        }
+
+        $this->compteAgencePartenaire = $compteAgencePartenaire;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|AdminSystem[]
+     */
+    public function getUtilisateurs(): Collection
+    {
+        return $this->utilisateurs;
+    }
+
+    public function addUtilisateur(AdminSystem $utilisateur): self
+    {
+        if (!$this->utilisateurs->contains($utilisateur)) {
+            $this->utilisateurs[] = $utilisateur;
+            $utilisateur->setAgencePartenaire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUtilisateur(AdminSystem $utilisateur): self
+    {
+        if ($this->utilisateurs->removeElement($utilisateur)) {
+            // set the owning side to null (unless already changed)
+            if ($utilisateur->getAgencePartenaire() === $this) {
+                $utilisateur->setAgencePartenaire(null);
+            }
+        }
 
         return $this;
     }
